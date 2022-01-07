@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  AZImageSlider
 //
-//  Created by mkyoo on 01/07/2022.
-//  Copyright (c) 2022 mkyoo. All rights reserved.
+//  Created by minkook on 01/07/2022.
+//  Copyright (c) 2022 minkook. All rights reserved.
 //
 
 import UIKit
@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         return true
     }

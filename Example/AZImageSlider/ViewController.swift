@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  AZImageSlider
 //
-//  Created by mkyoo on 01/07/2022.
-//  Copyright (c) 2022 mkyoo. All rights reserved.
+//  Created by minkook on 01/07/2022.
+//  Copyright (c) 2022 minkook. All rights reserved.
 //
 
 import UIKit

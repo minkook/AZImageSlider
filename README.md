@@ -1,6 +1,6 @@
 # AZImageSlider
 
-[![CI Status](https://img.shields.io/travis/mkyoo/AZImageSlider.svg?style=flat)](https://travis-ci.org/mkyoo/AZImageSlider)
+[![CI Status](https://img.shields.io/travis/minkook/AZImageSlider.svg?style=flat)](https://travis-ci.org/minkook/AZImageSlider)
 [![Version](https://img.shields.io/cocoapods/v/AZImageSlider.svg?style=flat)](https://cocoapods.org/pods/AZImageSlider)
 [![License](https://img.shields.io/cocoapods/l/AZImageSlider.svg?style=flat)](https://cocoapods.org/pods/AZImageSlider)
 [![Platform](https://img.shields.io/cocoapods/p/AZImageSlider.svg?style=flat)](https://cocoapods.org/pods/AZImageSlider)
@@ -22,7 +22,7 @@ pod 'AZImageSlider'
 
 ## Author
 
-mkyoo, manguksmediawill@gmail.com
+minkook, manguks@gmail.com
 
 ## License
 
