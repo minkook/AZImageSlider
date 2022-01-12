@@ -10,6 +10,10 @@ import Foundation
 open class AZImageSlider: UIControl {
     
     
+    //-----------------------------------------------------------------------------
+    // MARK: public
+    
+    // current value
     public var value: Int {
         get { return _value }
         set {
@@ -18,6 +22,8 @@ open class AZImageSlider: UIControl {
         }
     }
     
+    
+    // maximum value
     public var maxValue: Int {
         get { return _maxValue }
         set {
@@ -27,21 +33,23 @@ open class AZImageSlider: UIControl {
     }
     
     
-    //
-    public var customImage: UIImage?
+    // cuctom image
+    public var customImage: UIImage? {
+        get { return _customImage }
+        set {
+            _customImage = newValue
+            adjustItems()
+        }
+    }
     
-    
-    //
-    public var sensitivity: CGFloat = 0.58
     
     
     //-----------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------
-    
+    // MARK: private
     
     private var _value: Int = 0
     private var _maxValue: Int = 5
+    private var _customImage: UIImage? = nil
     
     private var items: Array<ItemImageView> = []
     
@@ -56,6 +64,8 @@ open class AZImageSlider: UIControl {
         
     }
     
+    private var startPoint: CGPoint?
+    
     override public init(frame: CGRect) {
         super.init(frame: frame)
         initialize()
@@ -67,22 +77,25 @@ open class AZImageSlider: UIControl {
     }
     
     private func initialize() {
-        maxValue = 5
+        self.maxValue = 5
     }
     
     private func adjustItems() {
         
         var image = defaultImage
-        if let customImage = customImage {
+        if let customImage = _customImage {
             image = customImage
         }
         
+        for item in items {
+            item.removeFromSuperview()
+        }
         items.removeAll()
         
-        let w = self.bounds.width / CGFloat(maxValue)
+        let w = self.bounds.width / CGFloat(_maxValue)
         let h = self.bounds.height
         
-        for i in 0..<5 {
+        for i in 0..<_maxValue {
             
             let imageView = ItemImageView(image: image)
             let x = w * CGFloat(i)
@@ -103,27 +116,29 @@ open class AZImageSlider: UIControl {
 // MARK: reload
 extension AZImageSlider {
     
-    private func reload(_ index: Int) {
-        let item = items[index]
+    private func reload(_ value: Int) {
+        let item = items[value - 1]
         reload(CGPoint(x: item.originFrame.maxX, y: item.originFrame.minY))
     }
     
     private func reload(_ pt: CGPoint) {
         
         let index = indexOfTouchPoint(pt)
-        if index != NSNotFound {
+        if index == NSNotFound { return }
+        
+        for i in 0..<items.count {
             
-            for i in 0..<items.count {
-                
-                let item = items[i]
-                
-                var v = (pt.x - item.originFrame.minX) / item.originFrame.width
-                
-                v = max(v, 0.0)
-                v = min(v, 1.0)
-                
-                item.transform = CGAffineTransform(scaleX: v, y: v)
-                
+            let item = items[i]
+            
+            var v = (pt.x - item.originFrame.minX) / item.originFrame.width
+            
+            v = max(v, 0.0)
+            v = min(v, 1.0)
+            
+            item.transform = CGAffineTransform(scaleX: v, y: v)
+            
+            if item.visible {
+                _value = (i + 1)
             }
             
         }
@@ -140,6 +155,7 @@ extension AZImageSlider {
     override open func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let pt = touch.location(in: self)
         reload(pt)
+        startPoint = pt
         return true
     }
     
@@ -150,12 +166,30 @@ extension AZImageSlider {
     }
     
     override open func endTracking(_ touch: UITouch?, with event: UIEvent?) {
+        
+        defer {
+            startPoint = nil
+        }
+        
+        guard let spt = startPoint else { return }
+        
+        guard let touch = touch else { return }
+        
+        let ept = touch.location(in: self)
+        let vector = CGVector(dx: ept.x - spt.x, dy: ept.y - spt.y)
+        
         for i in 0..<items.count {
             let item = items[i]
-            if item.autoTransform(sensitivity) {
-                _value = i
+            item.autoTransform(vector) { [weak self] in
+                guard let self = self else { return }
+                self._value = item.visible ? (i + 1) : i
             }
         }
+        
+    }
+    
+    override open func cancelTracking(with event: UIEvent?) {
+        startPoint = nil
     }
     
     private func indexOfTouchPoint(_ pt: CGPoint) -> Int {
@@ -183,45 +217,40 @@ class ItemImageView: UIImageView {
     
     public var originFrame: CGRect = CGRect.zero
     
-    private let standardScale: CGFloat = 0.58
+    public var visible: Bool { get { return self.transform.a > 0 } }
     
-    public func autoTransform(_ sensitivity: CGFloat) -> Bool {
+    public func autoTransform(_ vector: CGVector, completion: (() -> Void)?) {
         
         let v = self.transform.a
         
-        if 0 < v && v < 1 {
+        if v == 0 || v == 1 { return }
+        
+        let animateDuration: TimeInterval = 0.2
+        
+        if vector.dx < 0 {
             
-            if v <= sensitivity {
-                UIView.animate(withDuration: 0.2) {
-                    self.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
-                } completion: { isFinish in
-                    self.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
+            UIView.animate(withDuration: animateDuration) {
+                self.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+            } completion: { finish in
+                self.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
+                if let completion = completion {
+                    completion()
                 }
             }
-            else {
-                UIView.animate(withDuration: 0.2) {
-                    self.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                }
-            }
             
-            return true
         }
         else {
-            return false
+            
+            UIView.animate(withDuration: animateDuration) {
+                self.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            } completion: { finish in
+                if let completion = completion {
+                    completion()
+                }
+            }
+            
         }
         
     }
-    
-    //---------------------------
-    override init(image: UIImage?) {
-        super.init(image: image)
-        self.layer.borderWidth = 1.0
-        self.layer.borderColor = UIColor.green.cgColor
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    //---------------------------
     
 }

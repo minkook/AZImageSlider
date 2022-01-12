@@ -11,18 +11,17 @@ import AZImageSlider
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var imageSlider: AZImageSlider!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let frame = CGRect(x: 0, y: 200, width: self.view.bounds.width, height: 100)
-        let imageSlider: AZImageSlider = AZImageSlider(frame: frame)
-        self.view.addSubview(imageSlider)
-        
+        imageSlider.maxValue = 10
         
         //---------------------------
         //---------------------------
-        self.view.backgroundColor = UIColor.lightGray
+//        self.view.backgroundColor = UIColor.lightGray
         imageSlider.layer.borderWidth = 1.0
         imageSlider.layer.borderColor = UIColor.red.cgColor
         //---------------------------
@@ -34,6 +33,14 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
+    @IBAction func testButtonAction(_ sender: Any) {
+        
+        imageSlider.customImage = UIImage(systemName: "tortoise")
+        
+        imageSlider.value = 5
+        
+    }
+    
 }
 
