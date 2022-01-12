@@ -21,7 +21,6 @@ class ViewController: UIViewController {
         
         //---------------------------
         //---------------------------
-//        self.view.backgroundColor = UIColor.lightGray
         imageSlider.layer.borderWidth = 1.0
         imageSlider.layer.borderColor = UIColor.red.cgColor
         //---------------------------
@@ -36,9 +35,11 @@ class ViewController: UIViewController {
     
     @IBAction func testButtonAction(_ sender: Any) {
         
-        imageSlider.customImage = UIImage(systemName: "tortoise")
+//        imageSlider.customImage = UIImage(systemName: "tortoise")
         
-        imageSlider.value = 5
+//        imageSlider.value = 5
+        
+        imageSlider.imageContentMode = .scaleAspectFill
         
     }
     

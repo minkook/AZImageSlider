@@ -11,7 +11,7 @@ open class AZImageSlider: UIControl {
     
     
     //-----------------------------------------------------------------------------
-    // MARK: public
+    // MARK: Control
     
     // current value
     public var value: Int {
@@ -33,11 +33,24 @@ open class AZImageSlider: UIControl {
     }
     
     
+    
+    //-----------------------------------------------------------------------------
+    // MARK: Design
+    
     // cuctom image
     public var customImage: UIImage? {
         get { return _customImage }
         set {
             _customImage = newValue
+            adjustItems()
+        }
+    }
+    
+    
+    public var imageContentMode: UIView.ContentMode {
+        get { return _imageContentMode }
+        set {
+            _imageContentMode = newValue
             adjustItems()
         }
     }
@@ -50,6 +63,7 @@ open class AZImageSlider: UIControl {
     private var _value: Int = 0
     private var _maxValue: Int = 5
     private var _customImage: UIImage? = nil
+    private var _imageContentMode: UIView.ContentMode = .scaleAspectFit
     
     private var items: Array<ItemImageView> = []
     
@@ -98,6 +112,7 @@ open class AZImageSlider: UIControl {
         for i in 0..<_maxValue {
             
             let imageView = ItemImageView(image: image)
+            imageView.contentMode = self.imageContentMode
             let x = w * CGFloat(i)
             let frame = CGRect(x: x, y: 0, width: w, height: h)
             imageView.frame = frame
