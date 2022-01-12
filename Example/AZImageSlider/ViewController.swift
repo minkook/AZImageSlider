@@ -17,14 +17,20 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        imageSlider.maxValue = 10
-        
         //---------------------------
         //---------------------------
         imageSlider.layer.borderWidth = 1.0
         imageSlider.layer.borderColor = UIColor.red.cgColor
         //---------------------------
         //---------------------------
+        
+        imageSlider.maxValue = 10
+        
+        setUpImageSliderDelegate()
+        
+        imageSlider.didChangeTrackingValueBlock = { value in
+            print("block value: \(value)")
+        }
         
     }
 
@@ -35,12 +41,25 @@ class ViewController: UIViewController {
     
     @IBAction func testButtonAction(_ sender: Any) {
         
-//        imageSlider.customImage = UIImage(systemName: "tortoise")
-        
 //        imageSlider.value = 5
         
-        imageSlider.imageContentMode = .scaleAspectFill
+        imageSlider.customImage = UIImage(systemName: "tortoise")
         
+//        imageSlider.imageContentMode = .scaleAspectFill
+        
+    }
+    
+}
+
+
+extension ViewController: AZImageSliderDelegate {
+    
+    func setUpImageSliderDelegate() {
+        imageSlider.delegate = self
+    }
+    
+    func didChangeTrackingValue(_ imageSlider: AZImageSlider, value: Int) {
+        print("delegate value: \(value)")
     }
     
 }
