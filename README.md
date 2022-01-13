@@ -5,6 +5,12 @@
 [![License](https://img.shields.io/cocoapods/l/AZImageSlider.svg?style=flat)](https://cocoapods.org/pods/AZImageSlider)
 [![Platform](https://img.shields.io/cocoapods/p/AZImageSlider.svg?style=flat)](https://cocoapods.org/pods/AZImageSlider)
 
+
+<p align="center">
+      <img src="https://user-images.githubusercontent.com/2138712/149246589-aca8e04a-e193-43a8-ac20-02676c1ba345.gif" alt="AZImageSlider" title="AZImageSlider"> 
+</p>
+
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
