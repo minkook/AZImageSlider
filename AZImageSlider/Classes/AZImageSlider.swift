@@ -111,6 +111,7 @@ open class AZImageSlider: UIControl {
         let time = DispatchTime.now() + .microseconds(1)
         DispatchQueue.main.asyncAfter(deadline: time) {
             self.adjustItemsCore()
+            self.reload(self.value)
         }
         
     }
@@ -153,8 +154,12 @@ open class AZImageSlider: UIControl {
 extension AZImageSlider {
     
     private func reload(_ value: Int) {
-        let item = items[value - 1]
-        reload(CGPoint(x: item.originFrame.maxX, y: item.originFrame.minY))
+        var point: CGPoint = .zero
+        if value > 0 {
+            let item = items[value - 1]
+            point = CGPoint(x: item.originFrame.maxX, y: item.originFrame.minY)
+        }
+        reload(point)
     }
     
     private func reload(_ pt: CGPoint) {

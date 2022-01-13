@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         
         imageSlider.maxValue = 10
         
-        setUpImageSliderDelegate()
+        imageSlider.delegate = self
         
         imageSlider.didChangeTrackingValueBlock = { value in
             print("block value: \(value)")
@@ -39,12 +39,21 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+}
+
+
+// MARK: Button Action
+extension ViewController {
+    
     @IBAction func testButtonAction(_ sender: Any) {
         
+        // test value
 //        imageSlider.value = 5
         
+        // test custom image
         imageSlider.customImage = UIImage(systemName: "tortoise")
         
+        // test image content mode
 //        imageSlider.imageContentMode = .scaleAspectFill
         
     }
@@ -52,11 +61,8 @@ class ViewController: UIViewController {
 }
 
 
+// MARK: AZImageSliderDelegate
 extension ViewController: AZImageSliderDelegate {
-    
-    func setUpImageSliderDelegate() {
-        imageSlider.delegate = self
-    }
     
     func didChangeTrackingValue(_ imageSlider: AZImageSlider, value: Int) {
         print("delegate value: \(value)")
